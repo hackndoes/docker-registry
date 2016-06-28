@@ -1,0 +1,3 @@
+vars/domaincrt.yml
+vars/domainkey.yml
+vars/htpasswd.yml
