@@ -24,9 +24,10 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-  - hosts: registry_host
-    roles:
-        - docker_registry
+- hosts: registry
+  roles:
+    - docker_host 
+    - docker_registry
     
 
 License
