@@ -1,2 +1,53 @@
 ---
 # tasks file for docker-registry
+- include_vars: vars/domaincrt.yml
+- include_vars: vars/domainkey.yml
+- include_vars: vars/htpasswd.yml
+
+- name: create certs directory
+  file: path=/certs state=directory
+
+- name: create certs directory
+  file: path=/auth state=directory
+
+- name: put crt file for the registry
+  copy:
+    content: "{{ domain_crt }}"
+    dest: "/certs/domain.crt"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: put key file for the registry
+  copy:
+    content: "{{ domain_key }}"
+    dest: "/certs/domain.key"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: put auth file for the registry
+  copy:
+    content: "{{ htpasswd_content }}"
+    dest: "/auth/htpasswd"
+    owner: "root"
+    group: "root"
+    mode: 0644
+
+- name: launch docker registry container
+  docker: 
+    name: "registry"
+    image: "registry:2"
+    ports:
+      - "5000:5000"
+    restart_policy: "always"
+    env:
+      REGISTRY_AUTH: "htpasswd"
+      REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+      REGISTRY_AUTH_HTPASSWD_PATH: "/auth/htpasswd"
+      REGISTRY_HTTP_TLS_CERTIFICATE: "/certs/domain.crt"
+      REGISTRY_HTTP_TLS_KEY: "/certs/domain.key"
+    volumes:
+      - /certs:/certs
+      - /auth:/auth
+

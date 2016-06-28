@@ -10,22 +10,24 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 
 Role Variables
 --------------
+All this files/Variables are REQUIRED and cannot be omitted.
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+domain_crt: inside vars/domaincrt.yml value is the domain.crt of the registry as ansible-vault
+domain_key: inside vars/domainkey.yml value is the domain.key of the registry as ansible-vault
+htpasswd_content: inside vars/htpasswd.yml value is the output of registry:2 htpasswd command to generate the BasicAuthentication value for your registry user. a pair of username:base64(password).
 
 Dependencies
 ------------
-
+ansible_docker_role: https://github.com/shelleg/ansible-docker-role.git
 A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+  - hosts: registry_host
+    roles:
+        - docker_registry
+    
 
 License
 -------
